@@ -1,3 +1,3 @@
-Print EDiv(1, 81, 10)
+'Nothing yet
 
 '$include:'ExtArithmetic.bas'
