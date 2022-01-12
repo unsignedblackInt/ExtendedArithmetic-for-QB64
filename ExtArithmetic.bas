@@ -1,12 +1,18 @@
+'$Console:Only
+'_Dest _Console
 'Dim a As _Unsigned _Integer64
-'Print ExtDiv$(1, 998001, 200)
+'Print EDiv$(1, 998001, 200)
 'a = 1 / 998001
 'Print a
-'Print ExtFact(20)
-'Print ExtAdd(ExtAdd("8", "8"), "800")
-Print ExtMult("56890664327653534689", "56890664327653534689")
+'Do
+'    i = i + 1
+'    _Limit 5
+'    Print EFact(i)
+'Loop
+'Print EAdd$(ExtAdd("8", "8"), "800")
+'Print EMult("12345.67890", "12345678.90")
 
-Function ExtDiv$ (n, d, f)
+Function EDiv$ (n, d, f)
     n$ = Str$(n): d$ = Str$(d)
     res = n \ d
     r = n - (d * res)
@@ -25,16 +31,25 @@ Function ExtDiv$ (n, d, f)
             res$ = res$ + "0"
         End If
     Loop Until s = f
-    extDivison: ExtDiv$ = res$
+    extDivison: EDiv$ = res$
 End Function
 
-Function ExtMult$ (m$, n$)
+Function EMult$ (m$, n$)
     m$ = _Trim$(m$): n$ = _Trim$(n$)
+
+    'For Decimals
+    d_n = InStr(n$, "."): d_m = InStr(m$, ".")
+    n_d = Len(n$) - d_n: m_d = Len(m$) - d_m
+    If d_m = 0 Then m_d = 0: If d_n = 0 Then n_d = 0
+    Decimal = n_d + m_d
+    m$ = Left$(m$, d_m - 1) + Right$(m$, Len(m$) - d_m)
+    n$ = Left$(n$, d_n - 1) + Right$(n$, Len(n$) - d_n)
+
+    'Main Start
     If Len(m$) < Len(n$) Then
         mm$ = n$: nn$ = m$
         m$ = mm$: n$ = nn$
     End If
-    Print n$, m$
     For j = Len(n$) To 1 Step -1
         l_n = Val(Mid$(n$, j, 1))
         For i = Len(m$) To 1 Step -1
@@ -47,18 +62,22 @@ Function ExtMult$ (m$, n$)
         res$ = res$ + String$(Len(n$) - j, "0"): k = k + 1
         'Print res$, Len(n$) - j: Sleep
         If k = 2 Then
-            prdct$ = ExtAdd$(pres$, res$)
+            prdct$ = EAdd$(pres$, res$)
         ElseIf k < 2 Then
             pres$ = res$: prdct$ = pres$
         Else
-            prdct$ = ExtAdd$(prdct$, res$)
+            prdct$ = EAdd$(prdct$, res$)
         End If
         res$ = "": c = 0
     Next
-    ExtMult$ = prdct$
+    If Decimal <> 0 Then
+        prdct$ = String$(Decimal - Len(prdct$), "0") + prdct$
+        prdct$ = Left$(prdct$, Len(prdct$) - Decimal) + "." + Right$(prdct$, Decimal)
+    End If
+    EMult$ = prdct$
 End Function
 
-Function ExtAdd$ (m$, n$)
+Function EAdd$ (m$, n$)
     m$ = _Trim$(m$): n$ = _Trim$(n$)
 
     'case 2, both rational numbers
@@ -103,14 +122,14 @@ Function ExtAdd$ (m$, n$)
         If c <> 0 Then res$ = _Trim$(Str$(c)) + res$
     End If
 
-    ExtAdd$ = res$
+    EAdd$ = res$
 
 End Function
 
-Function ExtFact (n)
-    f = 1
+Function EFact$ (n)
+    f$ = "1"
     For i = n To 1 Step -1
-        f = f * i
+        f$ = EMult(f$, Str$(i))
     Next
-    ExtFact = f
+    EFact$ = f$
 End Function
