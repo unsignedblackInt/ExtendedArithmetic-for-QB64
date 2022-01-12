@@ -3,4 +3,5 @@ Something that serves beyond data types, performs operation on numbers which are
 Can Do(as of now):
   - Addition
   - Division (till any number of decimal place you want)
+  - Multiplication
   - Factorial (not completed yet)
