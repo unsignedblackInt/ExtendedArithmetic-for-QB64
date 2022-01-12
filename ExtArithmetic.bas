@@ -4,6 +4,7 @@
 'Print a
 'Print ExtFact(20)
 'Print ExtAdd(ExtAdd("8", "8"), "800")
+Print ExtMult("56890664327653534689", "56890664327653534689")
 
 Function ExtDiv$ (n, d, f)
     n$ = Str$(n): d$ = Str$(d)
@@ -27,8 +28,34 @@ Function ExtDiv$ (n, d, f)
     extDivison: ExtDiv$ = res$
 End Function
 
-Function ExtMult$ (m, n)
-
+Function ExtMult$ (m$, n$)
+    m$ = _Trim$(m$): n$ = _Trim$(n$)
+    If Len(m$) < Len(n$) Then
+        mm$ = n$: nn$ = m$
+        m$ = mm$: n$ = nn$
+    End If
+    Print n$, m$
+    For j = Len(n$) To 1 Step -1
+        l_n = Val(Mid$(n$, j, 1))
+        For i = Len(m$) To 1 Step -1
+            l_d = Val(Mid$(m$, i, 1))
+            sres$ = _Trim$(Str$((l_n * l_d) + c))
+            res$ = Right$(sres$, 1) + res$: c = Val(Left$(sres$, Len(sres$) - 1))
+            '?res$,sres$:sleep
+        Next
+        If c <> 0 Then res$ = _Trim$(Str$(c)) + res$
+        res$ = res$ + String$(Len(n$) - j, "0"): k = k + 1
+        'Print res$, Len(n$) - j: Sleep
+        If k = 2 Then
+            prdct$ = ExtAdd$(pres$, res$)
+        ElseIf k < 2 Then
+            pres$ = res$: prdct$ = pres$
+        Else
+            prdct$ = ExtAdd$(prdct$, res$)
+        End If
+        res$ = "": c = 0
+    Next
+    ExtMult$ = prdct$
 End Function
 
 Function ExtAdd$ (m$, n$)
@@ -73,7 +100,7 @@ Function ExtAdd$ (m$, n$)
         res$ = "." + res$
         GoTo Add
     Else
-        res$ = _Trim$(Str$(c)) + res$
+        If c <> 0 Then res$ = _Trim$(Str$(c)) + res$
     End If
 
     ExtAdd$ = res$
